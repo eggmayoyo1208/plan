@@ -1,0 +1,1523 @@
+/* ==========================================================================
+   TRIPLY Mobile App - Interactive Schedule & Budget Planner
+   Design System: Imweb Reference Design System
+   - Flat Depth (box-shadow: none for content)
+   - Canvas: #ffffff, Surface: #f8f9fb, Hairline: #dbdee3
+   - Ink: #15181e (Buttons, Primary Text)
+   - Brand Cyan: #00b9ff (Badges, Progress, Data Highlights)
+   - Pretendard 700 & 400 normal tracking
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --color-canvas: #ffffff;
+  --color-surface: #f8f9fb;
+  --color-surface-hover: #f1f3f7;
+  --color-hairline: #dbdee3;
+
+  --color-ink: #15181e;
+  --color-ink-hover: #2b303b;
+  --color-text-secondary: #4b515b;
+  --color-text-muted: #717680;
+  --color-text-faint: #9fa3ab;
+
+  --color-brand-cyan: #00b9ff;
+  --color-cyan-tint: rgba(0, 185, 255, 0.1);
+  --color-link-blue: #0090d4;
+
+  --color-danger: #ef4444;
+  --color-danger-light: #fee2e2;
+
+  --font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-card: 12px;
+  --radius-full: 999px;
+
+  --transition-fast: 0.2s ease;
+}
+
+body.app-viewport {
+  background-color: #ebedf2;
+  font-family: var(--font-family);
+  color: var(--color-ink);
+  line-height: 1.5;
+  font-size: 15px;
+  letter-spacing: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Device Frame
+   -------------------------------------------------------------------------- */
+.mobile-device {
+  width: 100%;
+  max-width: 412px;
+  height: 844px;
+  max-height: 94vh;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(21, 24, 30, 0.08); /* device exterior bezel only */
+}
+
+@media (max-width: 480px) {
+  body.app-viewport {
+    padding: 0;
+    background-color: var(--color-canvas);
+  }
+  .mobile-device {
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Status Bar (깨진 기호 없이 깔끔한 CSS 요소)
+   -------------------------------------------------------------------------- */
+.status-bar {
+  height: 38px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+  flex-shrink: 0;
+  user-select: none;
+  z-index: 20;
+}
+
+.status-bar__badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-bar__dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-ink);
+  border-radius: 50%;
+}
+
+.status-bar__battery-pill {
+  width: 20px;
+  height: 10px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 3px;
+  position: relative;
+}
+
+.status-bar__battery-pill::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  width: 12px;
+  background-color: var(--color-ink);
+  border-radius: 1px;
+}
+
+/* Home Indicator */
+.home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background-color: var(--color-ink);
+  opacity: 0.2;
+  border-radius: var(--radius-full);
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   App Top Navigation
+   -------------------------------------------------------------------------- */
+.app-nav {
+  height: 52px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-hairline);
+  background-color: var(--color-canvas);
+  flex-shrink: 0;
+  z-index: 15;
+}
+
+.app-nav__logo {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-ink);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.app-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trip-dday-badge {
+  background-color: var(--color-brand-cyan);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.menu-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.menu-btn:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.menu-btn__line {
+  width: 18px;
+  height: 2px;
+  background-color: var(--color-ink);
+  border-radius: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   Slide Drawer
+   -------------------------------------------------------------------------- */
+.drawer {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  visibility: hidden;
+  transition: visibility var(--transition-fast);
+}
+
+.drawer--open {
+  visibility: visible;
+}
+
+.drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(21, 24, 30, 0.4);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.drawer--open .drawer__backdrop {
+  opacity: 1;
+}
+
+.drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 78%;
+  background-color: var(--color-canvas);
+  border-left: 1px solid var(--color-hairline);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--transition-fast);
+}
+
+.drawer--open .drawer__panel {
+  transform: translateX(0);
+}
+
+.drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.drawer__logo {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.drawer__close-btn {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.drawer__menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.drawer__item {
+  display: block;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-base);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.drawer__item:hover {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.drawer__item--active {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 700;
+  border-left: 3px solid var(--color-brand-cyan);
+}
+
+.drawer__footer {
+  border-top: 1px solid var(--color-hairline);
+  padding-top: 16px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Main Scrollable Area
+   -------------------------------------------------------------------------- */
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 16px 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-behavior: smooth;
+}
+
+/* --------------------------------------------------------------------------
+   1. 메인 최상단 여행 정보 & 몽글몽글 3D 캐릭터 카드
+   -------------------------------------------------------------------------- */
+.trip-top-badge-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 100%);
+  border: 1.5px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 185, 255, 0.06);
+}
+
+.trip-top-badge-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trip-destination-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.country-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.destination-text {
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.destination-text strong {
+  color: var(--color-link-blue);
+  font-weight: 800;
+}
+
+.trip-dates-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.trip-dates-wrap strong {
+  color: var(--color-ink);
+}
+
+.trip-status-sub {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+/* 몽글몽글 2등신 3D 캐릭터 */
+.trip-top-badge-card__mascot {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: floatMascot 3s ease-in-out infinite alternate;
+}
+
+.mascot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(251, 146, 60, 0.25));
+}
+
+@keyframes floatMascot {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-4px) scale(1.02); }
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.chip--accent {
+  color: var(--color-link-blue);
+  background-color: var(--color-cyan-tint);
+  border-color: rgba(0, 185, 255, 0.3);
+}
+
+/* 간결한 1줄 스와이프 안내 배너 */
+.swipe-simple-notice {
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-hairline);
+  border-radius: var(--radius-base);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.swipe-simple-notice__icon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. Budget Tracker
+   -------------------------------------------------------------------------- */
+.budget-section--compact {
+  margin-bottom: -4px;
+}
+
+.budget-compact-card {
+  background: linear-gradient(135deg, #F8FAFC 0%, #F0F9FF 100%);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-base);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.budget-compact-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.budget-compact-card__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.budget-compact-card__balance {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-link-blue);
+  line-height: 1.2;
+}
+
+.budget-compact-card__sub {
+  font-size: 10px;
+  color: var(--color-text-faint);
+}
+
+.budget-compact-card__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  width: 130px;
+}
+
+.budget-mini-progress {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-hairline);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.budget-mini-progress__bar {
+  height: 100%;
+  background-color: var(--color-brand-cyan);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.budget-compact-card__tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.budget-percent-pill {
+  font-size: 10px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background-color: var(--color-brand-cyan);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.budget-day-mini {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+/* Theme Chip Selector in Modal */
+.theme-chip-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.theme-chip-btn {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-chip-btn:hover {
+  background-color: #FFFFFF;
+  border-color: var(--color-brand-cyan);
+}
+
+.theme-chip-btn--active {
+  background-color: var(--color-ink);
+  color: #FFFFFF;
+  border-color: var(--color-ink);
+}
+
+/* --------------------------------------------------------------------------
+   3. Day Tabs & Schedule
+   -------------------------------------------------------------------------- */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.day-tab {
+  flex: 1;
+  min-width: 74px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-base);
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.day-tab__num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.day-tab__date {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.day-tab--active {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.day-tab--active .day-tab__num {
+  color: #ffffff;
+}
+
+.day-tab--active .day-tab__date {
+  color: var(--color-brand-cyan);
+}
+
+.day-panel {
+  display: none;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.day-panel--active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.route-summary-bar {
+  background-color: var(--color-cyan-tint);
+  border: 1px solid rgba(0, 185, 255, 0.3);
+  border-radius: var(--radius-base);
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.route-summary-bar__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.route-summary-bar__badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-link-blue);
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 4px;
+}
+
+.route-summary-bar__text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.35;
+}
+
+.btn-adopt-route {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-ink);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-base);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-adopt-route:hover {
+  background-color: var(--color-ink-hover);
+}
+
+.btn-adopt-route:active {
+  transform: scale(0.96);
+}
+
+.btn-adopt-route--adopted {
+  background-color: #059669;
+}
+
+.btn-adopt-route__icon {
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+/* Timeline List */
+.timeline-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 12px;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-item__time-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+}
+
+.timeline-line {
+  width: 2px;
+  background-color: var(--color-hairline);
+  flex-grow: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Swipe Container & Actions (좌우 스와이프 제스처 지원)
+   -------------------------------------------------------------------------- */
+.swipe-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  margin-bottom: 6px;
+}
+
+.swipe-action {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 1;
+}
+
+/* 왼쪽으로 밀면 나타나는 삭제 영역 (빨간색) */
+.swipe-action--left {
+  right: 0;
+  background-color: var(--color-danger);
+  color: #ffffff;
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+}
+
+/* 오른쪽으로 밀면 나타나는 수정 영역 (하늘색/잉크) */
+.swipe-action--right {
+  left: 0;
+  background-color: var(--color-brand-cyan);
+  color: #ffffff;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.swipe-action__icon {
+  font-size: 16px;
+}
+
+/* Plan Card */
+.plan-card {
+  position: relative;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  padding: 12px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 2;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+/* 우측 상단 X 삭제 버튼 */
+.card-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 5;
+}
+
+.card-delete-btn:hover {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.plan-card__body {
+  flex: 1;
+  min-width: 0;
+  padding-right: 18px; /* clearance for delete X button */
+}
+
+.plan-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.plan-category {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-link-blue);
+  background-color: var(--color-cyan-tint);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.plan-category--food {
+  color: #d97706;
+  background-color: rgba(245, 158, 11, 0.12);
+}
+
+.plan-category--night {
+  color: #7c3aed;
+  background-color: rgba(124, 58, 237, 0.1);
+}
+
+.plan-category--accent {
+  color: #059669;
+  background-color: rgba(16, 185, 129, 0.12);
+}
+
+.cost-editable-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cost-editable-btn:hover {
+  background-color: #ffffff;
+  border-color: var(--color-brand-cyan);
+}
+
+.cost-editable-btn__val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.cost-editable-btn__pencil {
+  font-size: 10px;
+  color: var(--color-brand-cyan);
+}
+
+.plan-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plan-card__desc {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.plan-card__route {
+  display: flex;
+}
+
+.route-pill {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.plan-card__media {
+  width: 66px;
+  height: 66px;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--color-hairline);
+}
+
+.plan-card__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Transit step */
+.transit-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 58px;
+  padding: 6px 10px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+.transit-step__icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.transit-step__text strong {
+  color: var(--color-ink);
+}
+
+/* --------------------------------------------------------------------------
+   4. Map Link Section
+   -------------------------------------------------------------------------- */
+.map-link-section {
+  margin-top: 4px;
+}
+
+.map-link-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--color-canvas);
+  border: 1.5px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.map-link-card:hover {
+  background-color: var(--color-surface);
+  border-color: var(--color-brand-cyan);
+}
+
+.map-link-card__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-base);
+  background-color: var(--color-cyan-tint);
+  color: var(--color-link-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.map-link-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.map-link-card__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 2px;
+}
+
+.map-link-card__desc {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-link-card__arrow {
+  font-size: 14px;
+  color: var(--color-text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   Floating Action Button (FAB)
+   -------------------------------------------------------------------------- */
+.fab-wrapper {
+  position: absolute;
+  bottom: 74px;
+  right: 18px;
+  z-index: 24;
+}
+
+.fab-btn {
+  background-color: #F59E0B;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(21, 24, 30, 0.2);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.fab-btn:active {
+  transform: scale(0.96);
+  background-color: var(--color-ink-hover);
+}
+
+.fab-btn__icon {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.fab-btn__text {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Modals
+   -------------------------------------------------------------------------- */
+.modal {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  visibility: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: visibility var(--transition-fast);
+}
+
+.modal--open {
+  visibility: visible;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(21, 24, 30, 0.45);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.modal--open .modal__backdrop {
+  opacity: 1;
+}
+
+.modal__dialog {
+  position: relative;
+  width: 100%;
+  background: var(--color-canvas);
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform var(--transition-fast);
+  z-index: 2;
+  border-top: 1px solid var(--color-hairline);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal--open .modal__dialog {
+  transform: translateY(0);
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.modal__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.modal__close {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.form-input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-base);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+}
+
+.form-textarea {
+  height: auto;
+  padding: 8px 12px;
+  resize: vertical;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-brand-cyan);
+  background-color: #ffffff;
+}
+
+.form-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn--primary {
+  background-color: var(--color-ink);
+  color: #ffffff;
+  height: 44px;
+  font-size: 14px;
+  border: none;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-ink-hover);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Bottom Tab Bar
+   -------------------------------------------------------------------------- */
+.bottom-tab {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--color-canvas);
+  border-top: 1px solid var(--color-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 6px;
+  z-index: 25;
+}
+
+.bottom-tab__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-text-faint);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 4px 16px;
+}
+
+.bottom-tab__item--active {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   여행 계획 / Day 캐러셀 확장 기능
+   기존 카드의 색상과 타이포는 유지하고 동작에 필요한 레이아웃만 추가
+   -------------------------------------------------------------------------- */
+.trip-carousel {
+  margin: 0 -16px;
+  max-width: calc(100% + 32px);
+  overflow: hidden;
+}
+
+.trip-carousel__track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 16px 4px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.trip-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.trip-carousel .trip-top-badge-card {
+  position: relative;
+  flex: 0 0 calc(100% - 32px);
+  min-width: 0;
+  scroll-snap-align: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.trip-carousel .trip-top-badge-card--active {
+  border-color: rgba(0, 185, 255, 0.55);
+  box-shadow: 0 4px 16px rgba(0, 185, 255, 0.1);
+}
+
+.trip-plan-number {
+  position: absolute;
+  top: 8px;
+  left: 9px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  z-index: 2;
+}
+
+.trip-edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.trip-carousel .trip-top-badge-card__info {
+  padding-top: 14px;
+}
+
+.destination-trigger {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-link-blue);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.trip-info-trigger {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+button.chip.trip-people-chip {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.trip-add-card {
+  flex: 0 0 112px;
+  min-height: 132px;
+  border: 1.5px dashed var(--color-hairline);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.trip-add-card__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--color-hairline);
+  color: var(--color-link-blue);
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.trip-add-card__text {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.trip-carousel__hint {
+  margin: 3px 16px 0;
+  color: var(--color-text-faint);
+  font-size: 10px;
+}
+
+.day-tabs {
+  width: 100%;
+  max-width: 100%;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+
+.day-tab {
+  flex: 0 0 74px;
+  scroll-snap-align: start;
+}
+
+.day-tab--add {
+  border-style: dashed;
+  background: #ffffff;
+  color: var(--color-link-blue);
+}
+
+.day-tab--add:hover {
+  border-color: var(--color-brand-cyan);
+  background: var(--color-cyan-tint);
+}
+
+.day-tab__add-icon {
+  font-size: 20px;
+  line-height: 15px;
+  color: var(--color-link-blue);
+}
+
+.plan-card,
+.timeline-time {
+  cursor: pointer;
+}
+
+.trip-date-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.destination-list {
+  display: block;
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-base);
+  background: #ffffff;
+}
+
+.app-content,
+.schedule-section,
+#timelineContainer {
+  width: 100%;
+  min-width: 0;
+}
+
+.schedule-section,
+#timelineContainer {
+  overflow-x: clip;
+}
+
+.destination-list__country {
+  position: sticky;
+  top: 0;
+  padding: 6px 10px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-hairline);
+  border-bottom: 1px solid var(--color-hairline);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 800;
+  z-index: 1;
+}
+
+.destination-list__country:first-child {
+  border-top: 0;
+}
+
+.destination-list__city {
+  width: 100%;
+  padding: 8px 12px 8px 30px;
+  border: 0;
+  border-bottom: 1px solid var(--color-surface);
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.destination-list__city:hover,
+.destination-list__city:focus {
+  background: var(--color-cyan-tint);
+  outline: none;
+}
+
+.destination-list__empty {
+  padding: 14px 12px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 360px) {
+  .trip-date-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-carousel .trip-top-badge-card {
+    flex-basis: calc(100% - 24px);
+  }
+}
